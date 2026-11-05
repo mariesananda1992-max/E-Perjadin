@@ -22,6 +22,7 @@ import { CetakDokumenModal } from './components/dokumen/CetakDokumenModal';
 import { HelpFlowModal } from './components/common/HelpFlowModal';
 import { LoginModal } from './components/auth/LoginModal';
 import { UbahNamaModal } from './components/auth/UbahNamaModal';
+import { GoogleWorkspaceView } from './components/workspace/GoogleWorkspaceView';
 import { PerjalananDinas } from './types';
 
 function MainApp() {
@@ -136,6 +137,8 @@ function MainApp() {
           {activeTab === 'spp' && <SPPView />}
 
           {activeTab === 'laporan' && <LaporanKeuanganView />}
+
+          {activeTab === 'workspace' && <GoogleWorkspaceView />}
 
           {activeTab === 'master' && <DataMasterView />}
 

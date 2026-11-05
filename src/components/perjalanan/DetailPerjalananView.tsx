@@ -24,8 +24,11 @@ import {
   FileCheck2,
   DollarSign,
   AlertCircle,
-  CheckCircle2
+  CheckCircle2,
+  HardDrive
 } from 'lucide-react';
+import { uploadFileToDrive } from '../../services/googleDriveService';
+import { getGoogleAccessToken } from '../../services/googleAuth';
 
 interface DetailPerjalananViewProps {
   perjalanan: PerjalananDinas;
@@ -253,6 +256,21 @@ export const DetailPerjalananView: React.FC<DetailPerjalananViewProps> = ({
   const canPegawaiUpload = (currentUser.role === 'pegawai' && perjalanan.pegawaiPengajuId === currentUser.id) || 
                            currentUser.role === 'operator' || 
                            currentUser.role === 'admin';
+
+  const handleSaveAttachmentToDrive = async (b: BerkasLampiran) => {
+    const token = await getGoogleAccessToken();
+    if (!token) {
+      setActionError('Akun Google belum terhubung. Silakan buka menu "Google Drive & Sheets" di sidebar untuk menghubungkan akun Google Anda.');
+      return;
+    }
+    try {
+      const summaryText = `Dokumen Perjalanan Dinas e-Perjadin Kendal\nNomor SPT: ${perjalanan.nomorSPT || '-'}\nMaksud: ${perjalanan.maksudPerjalanan}\nKota Tujuan: ${perjalanan.kotaTujuan}\nBerkas: ${b.namaFile} (${b.ukuranKB} KB)\nKeterangan: ${b.keterangan}\nDiunggah oleh: ${b.diunggahOleh}\nTanggal: ${b.diunggahPada}`;
+      await uploadFileToDrive(b.namaFile, summaryText, 'text/plain');
+      setActionSuccess(`Berkas "${b.namaFile}" berhasil dicadangkan ke Google Drive!`);
+    } catch (err: any) {
+      setActionError(err.message || 'Gagal menyimpan berkas ke Google Drive.');
+    }
+  };
 
   return (
     <div className="space-y-6">
@@ -695,6 +713,15 @@ export const DetailPerjalananView: React.FC<DetailPerjalananViewProps> = ({
                     </div>
 
                     <div className="flex items-center gap-2">
+                      <button
+                        onClick={() => handleSaveAttachmentToDrive(b)}
+                        className="px-2.5 py-1.5 text-xs text-blue-700 hover:text-blue-900 hover:bg-blue-50 rounded-md transition-colors flex items-center gap-1 cursor-pointer"
+                        title="Cadangkan Berkas ke Google Drive"
+                      >
+                        <HardDrive className="w-3.5 h-3.5 text-blue-600" />
+                        <span className="hidden sm:inline">Ke Drive</span>
+                      </button>
+
                       <button
                         onClick={() => setActionSuccess(`Pratinjau Berkas: ${b.namaFile} (${b.ukuranKB} KB) · Keterangan: ${b.keterangan}`)}
                         className="px-2.5 py-1.5 text-xs text-slate-600 hover:text-slate-900 hover:bg-slate-100 rounded-md transition-colors flex items-center gap-1 cursor-pointer"

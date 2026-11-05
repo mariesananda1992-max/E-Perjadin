@@ -12,7 +12,8 @@ import {
   PlusCircle,
   Clock,
   Layers,
-  Receipt
+  Receipt,
+  FileSpreadsheet
 } from 'lucide-react';
 
 interface SidebarProps {
@@ -79,6 +80,12 @@ export const Sidebar: React.FC<SidebarProps> = ({ activeTab, setActiveTab, onOpe
       id: 'laporan',
       label: 'Laporan Keuangan & SPJ',
       icon: FileText,
+      roles: ['pegawai', 'atasan', 'operator', 'bendahara', 'admin'],
+    },
+    {
+      id: 'workspace',
+      label: 'Google Drive & Sheets',
+      icon: FileSpreadsheet,
       roles: ['pegawai', 'atasan', 'operator', 'bendahara', 'admin'],
     },
     {

@@ -121,6 +121,14 @@ export const Navbar: React.FC<NavbarProps> = ({
             >
               Laporan & SPJ
             </button>
+            <button
+              onClick={() => setActiveTab('workspace')}
+              className={`hover:text-emerald-700 transition-colors whitespace-nowrap py-1 cursor-pointer border-b-2 flex items-center gap-1.5 ${
+                activeTab === 'workspace' ? 'text-emerald-700 border-emerald-700 font-semibold' : 'border-transparent'
+              }`}
+            >
+              <span>Drive & Sheets</span>
+            </button>
           </nav>
 
           {/* Zone 3: 1 primary action area: Data Login, Role Switcher & Help Modal */}
